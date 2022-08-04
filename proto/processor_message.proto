@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package pb;
+
+import "memory_message.proto";
+
+option go_package = "/pb";
+
+message CPU {
+    /* Always give comment to make things clear
+    as this will be the communication rule */
+
+    /* Tag 19.000 - 19.999 is reserved for internal use, no need to be in-order/sequential
+    but must be unique for the same-level fields (in 1 message) */
+
+    // Tag 1-15 only need 1 byte (8 bits) and 16-2047 takes 2 bytes (16 bits)
+    // So use it wisely for the most frequent occuring fields
+
+    string brand = 1; // Intel, AMD
+    string name = 2; // Core i7-9320, etc
+    uint32 number_cores = 3; // can not be negative
+    uint32 number_threads = 4; // can not be negative
+    double min_ghz = 5; // can also be float
+    double max_ghz = 6;
+}
+
+message GPU {
+    string brand = 1;
+    string name = 2;
+    double min_ghz = 3;
+    double max_ghz = 4;
+    Memory memory = 5;
+}
+// To compile use "protoc -I=proto --go_out=./ proto/*.proto"
